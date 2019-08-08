@@ -20,9 +20,6 @@ private:
     /* define no value variable */
     std::string NOVALUE = "NO_VALUE";
 
-    /* help information */
-    std::string helpinfo;
-
     
 public:
     /* Constructor */
@@ -35,15 +32,6 @@ public:
     int getparameter( int& param, std::string shortname, std::string longname );
     int getparameter( double& param, std::string shortname, std::string longname );
     int getparameter( std::string& param, std::string shortname, std::string longname );
-
-    /* add general information to help */
-    void addgeneral2help( std::string description );
-
-    /* add parameters to help list */
-    void addparam2help( std::string shortname, std::string longname, std::string description );
-
-    /* print helpfinfo */
-    void printhelp( void );
 
     /* for debugging purposes */
     void listargs();
@@ -83,53 +71,6 @@ justargs::~justargs()
 {
 }
 
-
-
-void justargs::addgeneral2help( std::string description )
-{
-    helpinfo.append( description );
-}
-
-
-void justargs::addparam2help( std::string shortname, std::string longname, std::string description )
-{
-    helpinfo.append( " " );
-    if( shortname == "" )
-    {
-        helpinfo.append( longname );
-    }
-    else if( longname == "" )
-    {
-        helpinfo.append( shortname ); //helpinfo.append( "\t" );
-    }
-    else if( (shortname != "") && (longname != "") )
-    {
-        helpinfo.append( shortname ); helpinfo.append( ", " ); helpinfo.append( longname );
-    }
-
-    if( (shortname+longname).length() <= 6  )
-    {
-        helpinfo.append( "\t\t\t" ); helpinfo.append( description ); helpinfo.append( "\n" );
-    }
-    else if( ( (shortname+longname).length() > 7 ) && ( (shortname+longname).length() <= 14 ) )
-    {
-        helpinfo.append( "\t\t" ); helpinfo.append( description ); helpinfo.append( "\n" );
-    }
-    else if( ( (shortname+longname).length() > 14 ) && ( (shortname+longname).length() <= 20 ) )
-    {
-        helpinfo.append( "\t" ); helpinfo.append( description ); helpinfo.append( "\n" );
-    }
-    else if( (shortname+longname).length() > 20 )
-    {
-        helpinfo.append( "\n\t\t\t" ); helpinfo.append( description ); helpinfo.append( "\n" );
-    }
-}
-
-
-void justargs::printhelp( void )
-{
-    std::cout << helpinfo << std::endl;
-}
 
 
 

@@ -50,13 +50,6 @@ Create instance of justargs:
 justargs cmdline( argc, argv );
 ```
 
-Optional: Create help with general information and parameter informations:
-
-```cpp
-cmdline.addgeneral2help( "General Information\n" );
-cmdline.addparam2help( "-v", "--verbose", "Print Verbose information" );
-```
-
 Get parameter values and write into predefined variables. This function is overloaded and accepts `bool`, `int`, `double` and `string` type variables as first argument.
 
 ```cpp
@@ -89,22 +82,11 @@ int main( int argc, char * argv[] )
     justargs cmdline( argc, argv );
 
 
-    /* Create help */
-    cmdline.addgeneral2help( "Personal Information Display 0.1.5\n");
-    cmdline.addgeneral2help( "\nThis application displays your Information from the command line arguments. All options are required!\n" );
-
-    cmdline.addgeneral2help( "\nOptions:\n" );
-    cmdline.addparam2help( "-v", "--verbose", "Set this true to get also the height displayed" );
-    cmdline.addparam2help( "", "--name", "What is your name?" );
-    cmdline.addparam2help( "-a", "", "How old are you?" );
-    cmdline.addparam2help( "-h", "--height", "How tall are you?" );
-
 
     /* get parameters from command line into variables */
     if( (cmdline.getparameter( verbose, "-v", "--verbose" )) != 0 )
     {
         std::cerr << "Parameter verbose not present or of wrong type!\n";
-        cmdline.printhelp();
         return 1;
     }
 
@@ -113,7 +95,6 @@ int main( int argc, char * argv[] )
     if( (cmdline.getparameter( age, "-a", "" )) != 0 )
     {
         std::cerr << "Parameter age not present or of wrong type!\n";
-        cmdline.printhelp();
         return 1;
     }
 
@@ -122,7 +103,6 @@ int main( int argc, char * argv[] )
     if( (cmdline.getparameter( name, "", "--name" )) != 0 )
     {
         std::cerr << "Parameter height not present or of wrong type!\n";
-        cmdline.printhelp();
         return 1;
     }
 
@@ -131,7 +111,6 @@ int main( int argc, char * argv[] )
     if( (cmdline.getparameter( height, "-h", "--height" )) != 0 )
     {
         std::cerr << "Parameter height not present or of wrong type!\n";
-        cmdline.printhelp();
         return 1;
     }
 
