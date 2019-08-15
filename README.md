@@ -50,11 +50,18 @@ Create instance of justargs:
 justargs cmdline( argc, argv );
 ```
 
-Get parameter values and write into predefined variables. This function is overloaded and accepts `bool`, `int`, `double` and `string` type variables as first argument.
+Get parameter values and write into predefined variables. This function is overloaded and accepts `bool`, `int`, `double` and `string` type variables as first argument. The function `getparameter` returns one of the following integers:
+
+```cpp
+#define justargsOK 0
+#define justargsPRESENT 1
+#define justargsFAIL 2
+#define justargsNOTFOUND 3
+```
 
 ```cpp
 bool verbose;
-if( (cmdline.getparameter( verbose, "-v", "--verbose" )) != 0 )
+if( (cmdline.getparameter( verbose, "-v", "--verbose" )) != justargsOK )
 {
     std::cerr << "Not given or not boolen\n";
     return 1;
@@ -72,6 +79,7 @@ if( (cmdline.getparameter( verbose, "-v", "--verbose" )) != 0 )
 int main( int argc, char * argv[] )
 {
     /* variables to be used in ths application */
+    bool help;
     bool verbose;
     int age;
     double height;
@@ -82,9 +90,16 @@ int main( int argc, char * argv[] )
     justargs cmdline( argc, argv );
 
 
+    /* check if help is present, if so print help and exit */
+    if(  (cmdline.getparameter( help, "-h", "--help" )) < justargsFAIL )
+    {
+        std::cout << "This is a not so helpful helpscreen\n";
+        return 0;
+    }
+
 
     /* get parameters from command line into variables */
-    if( (cmdline.getparameter( verbose, "-v", "--verbose" )) != 0 )
+    if( (cmdline.getparameter( verbose, "-v", "--verbose" )) != justargsOK )
     {
         std::cerr << "Parameter verbose not present or of wrong type!\n";
         return 1;
@@ -92,7 +107,7 @@ int main( int argc, char * argv[] )
 
 
     /* get parameter with only shortname */
-    if( (cmdline.getparameter( age, "-a", "" )) != 0 )
+    if( (cmdline.getparameter( age, "-a", "" )) != justargsOK )
     {
         std::cerr << "Parameter age not present or of wrong type!\n";
         return 1;
@@ -100,7 +115,7 @@ int main( int argc, char * argv[] )
 
 
     /* get parameter with only longname */
-    if( (cmdline.getparameter( name, "", "--name" )) != 0 )
+    if( (cmdline.getparameter( name, "", "--name" )) != justargsOK )
     {
         std::cerr << "Parameter height not present or of wrong type!\n";
         return 1;
@@ -108,7 +123,7 @@ int main( int argc, char * argv[] )
 
 
     /* get parameter with both long and short names */
-    if( (cmdline.getparameter( height, "-h", "--height" )) != 0 )
+    if( (cmdline.getparameter( height, "-h", "--height" )) != justargsOK )
     {
         std::cerr << "Parameter height not present or of wrong type!\n";
         return 1;

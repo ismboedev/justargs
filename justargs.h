@@ -2,6 +2,12 @@
 #include <vector>
 #include <iostream>
 
+/* define return types */
+#define justargsOK 0
+#define justargsPRESENT 1
+#define justargsFAIL 2
+#define justargsNOTFOUND 3
+
 
 /* simplest argument parser with boolean and parameter type of arguments */
 class justargs
@@ -79,24 +85,27 @@ int justargs::getparameter( bool& param, std::string shortname, std::string long
 {
     for( int i = 0; i < namesinput.size(); i++ )
     {
-        if( ( ( namesinput[i] == shortname ) || ( namesinput[i] == longname ) ) && ( valuesinput[i] != NOVALUE ) )
+        if( ( namesinput[i] == shortname ) || ( namesinput[i] == longname ) )
         {
-
-            // check if string says true
-            if( ( valuesinput[i] == "true" ) || ( valuesinput[i] == "True" ) || ( valuesinput[i] ==" TRUE" ) )
+            if( valuesinput[i] != NOVALUE )
             {
-                param = true;
-                return 0;
+                // check if string says true
+                if( ( valuesinput[i] == "true" ) || ( valuesinput[i] == "True" ) || ( valuesinput[i] ==" TRUE" ) )
+                {
+                    param = true;
+                    return justargsOK;
+                }
+                else
+                {
+                    param = false;
+                    return justargsOK;
+                }
             }
-            else
-            {
-                param = false;
-                return 0;
-            }
+            return justargsPRESENT;
         }
     }
     // else parameter not found, or wrong type:
-    return 2;
+    return justargsNOTFOUND;
 }
 
 /* get parameter as int */
@@ -104,21 +113,25 @@ int justargs::getparameter( int& param, std::string shortname, std::string longn
 {
     for( int i = 0; i < namesinput.size(); i++ )
     {
-        if( ( ( namesinput[i] == shortname ) || ( namesinput[i] == longname ) ) && ( valuesinput[i] != NOVALUE ) )
+        if( ( namesinput[i] == shortname ) || ( namesinput[i] == longname )  )
         {
-            try
+            if( valuesinput[i] != NOVALUE )
             {
-                param = std::stoi( valuesinput[i] );
-                return 0;
+                try
+                {
+                    param = std::stoi( valuesinput[i] );
+                    return justargsOK;
+                }
+                catch(const std::exception& e)
+                {
+                    return justargsFAIL;
+                }
             }
-            catch(const std::exception& e)
-            {
-                return 1;
-            }
+            return justargsPRESENT;
         }
     }
     // else parameter not found, or wrong type:
-    return 2;
+    return justargsNOTFOUND;
 }
 
 /* get parameter as double */
@@ -126,21 +139,25 @@ int justargs::getparameter( double& param, std::string shortname, std::string lo
 {
     for( int i = 0; i < namesinput.size(); i++ )
     {
-        if( ( ( namesinput[i] == shortname ) || ( namesinput[i] == longname ) ) && ( valuesinput[i] != NOVALUE ) )
+        if( ( namesinput[i] == shortname ) || ( namesinput[i] == longname )  )
         {
-            try
+            if( valuesinput[i] != NOVALUE )
             {
-                param = std::stod( valuesinput[i] );
-                return 0;
+                try
+                {
+                    param = std::stod( valuesinput[i] );
+                    return justargsOK;
+                }
+                catch(const std::exception& e)
+                {
+                    return justargsFAIL;
+                }
             }
-            catch(const std::exception& e)
-            {
-                return 1;
-            }
+            return justargsPRESENT;
         }
     }
     // else parameter not found, or wrong type:
-    return 2;
+    return justargsNOTFOUND;
 }
 
 /* get parameter as string */
@@ -148,14 +165,18 @@ int justargs::getparameter( std::string& param, std::string shortname, std::stri
 {
     for( int i = 0; i < namesinput.size(); i++ )
     {
-        if( ( ( namesinput[i] == shortname ) || ( namesinput[i] == longname ) ) && ( valuesinput[i] != NOVALUE ) )
+        if( ( namesinput[i] == shortname ) || ( namesinput[i] == longname )  )
         {
-            param = valuesinput[i];
-            return 0;
+            if( valuesinput[i] != NOVALUE )
+            {
+                param = valuesinput[i];
+                return justargsOK;
+            }
+            return justargsPRESENT;
         }
     }
     // else parameter not found, or wrong type:
-    return 2;
+    return justargsNOTFOUND;
 }
 
 
