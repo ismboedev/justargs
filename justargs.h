@@ -36,6 +36,7 @@ public:
     /* get parameter, if they exist and convert to bool, int, double or string */
     int getparameter( bool& param, std::string shortname, std::string longname );
     int getparameter( int& param, std::string shortname, std::string longname );
+    int getparameter( unsigned int& param, std::string shortname, std::string longname );
     int getparameter( double& param, std::string shortname, std::string longname );
     int getparameter( std::string& param, std::string shortname, std::string longname );
 
@@ -120,6 +121,32 @@ int justargs::getparameter( int& param, std::string shortname, std::string longn
                 try
                 {
                     param = std::stoi( valuesinput[i] );
+                    return justargsOK;
+                }
+                catch(const std::exception& e)
+                {
+                    return justargsFAIL;
+                }
+            }
+            return justargsPRESENT;
+        }
+    }
+    // else parameter not found, or wrong type:
+    return justargsNOTFOUND;
+}
+
+/* get parameter as unsigned int */
+int justargs::getparameter( unsigned int& param, std::string shortname, std::string longname )
+{
+    for( int i = 0; i < namesinput.size(); i++ )
+    {
+        if( ( namesinput[i] == shortname ) || ( namesinput[i] == longname )  )
+        {
+            if( valuesinput[i] != NOVALUE )
+            {
+                try
+                {
+                    param = std::stoul( valuesinput[i] );
                     return justargsOK;
                 }
                 catch(const std::exception& e)
